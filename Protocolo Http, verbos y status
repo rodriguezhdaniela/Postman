@@ -1,0 +1,63 @@
+Http 
+Protocolo de transferencia de hipertexto (en inglés, Hypertext Transfer Protocol)
+Es un protocolo donde se especifica reglas en la comunicación. 
+
+Verbos HTTP
+GET: Solicitar datos o algún recurso
+HEAD: Traer headres, como una petición GET pero sin contenido
+POST: Enviar datos a un recurso para la creación
+Put: Reemplazar por completo un recurso
+Delete: Eliminar un recurso
+
+Los ESTADOS
+Sirven para descubrir el estado de la petición hecha al servidor, como estan siendo procesada la solicitud o en que parte va. 
+
+1XX Esto indica que la petición fue recibida y el servidor sigue trabajando en el proceso
+2XX Indica que la petición fue recibida y procesada correctamente
+3XX Indica que hay que tomar acciones adicionales para completar la solicitud. Por lo general indican redirección
+4XX Errores del lado del cliente. Indica que se hizo mal una soliciutd, faltan datos, headres o cualquier otro ERROR que puede ocurrir.
+5xx Errores del servidor. Indica que falló completamente la ejecución.
+
+Códigos más usados en una API
+200 ok
+201 solicitud post correctamente procesada
+204 la solicitud se procesó pero no devuelve nada (ejemplo solicitud con DELETE)
+400 bad request
+403 forbidded. No se tiene acceso al recurso aunque este autenticado
+401 Unauthorized
+404 No exite recurso
+500 Error del servidor
+
+
+Estructuras de las URLs
+
+Recurso:  Es la instancia o la represetnación de un objeto o la representación de algo, tiene datos y operacioens asociadas a él.
+
+Colecciones: Un conjunto de recursos.
+
+URL: Uniform Resource Locator es la ruta en la cual puedes ser ubicado un recurso  y ejecutar las operacioens sobre él
+
+CRUD: Hace referencia a las operaciones básicas que se pueden ejecutar sobre un recurso
+
+Endpoints: Es el punto final de la comunicación con un ente, en este caso, un endpoitn esta asociado a una URL y a las operaciones que podemos ejecutar. 
+Los endpoint definen operaciones que se quieren ejecutar sobre un recurso. }
+
+ejemplos de endpoints
+* /get-all-courses: para obtener una colección de Cursos
+* /add-new-course: Para crear un nuevo recurso de cursos.
+* /delete-all-courses: Para eliminar todos los recursos.
+
+Pero, esto implicaría un problema. El API puede llenarse de endpoints que ejecutan una sola operación, esto no es escalable, significa que si por ejemplo el recurso Cursos pasa a llamarse Clases habría que actualizar absolutamente todas las URLs y asegurarse de ello puede convertirse en un dolor de cabeza.
+
+Entonces, ¿cuál es la buena práctica en este caso?
+
+Como lo vimos en la clase pasada, el protocolo HTTP especifica una serie de verbos que indican acciones. Lo ideal es que la operación que se ejecute sobre un recurso se obtenga a través del verbo HTTP de la petición y no que esté definido en el endpoint. Por ejemplo:
+
+/courses: Dependiendo del verbo HTTP se ejecutará una operación en particular. Quedaría así:
+GET /courses: trae la colección de Cursos.
+POST /courses: crea un nuevo recurso de Cursos.
+DELETE /courses: elimina todos los cursos.
+De esta manera queda mucho más organizado un API. Pero, qué pasa si queremos traer no una colección de cursos como en los casos anteriores, sino un recurso en específico.
+
+Por lo general cada recurso tiene un identificador único, un ID, es con esto que llamaremos a un endpoint para que nos retorne la información del recurso. Por ejemplo:
+
