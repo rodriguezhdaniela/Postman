@@ -1,0 +1,245 @@
+GET
+
+GET hhtp://localhost:8000/api/courses/
+ET hhtp://localhost:8000/api/courses/1 ->detalle del curso en específico
+GET http://localhost:8000/api/materials/1/ ->Para mirar la relación 
+
+
+CUANDO RESULTADO ESTA PAGINADO PARA SU CONFIGURACIÓN SE UTILIZARÁ PARAMENTROS
+
+Anteriormente se pasaban datos en la url:
+GET hhtp://localhost:8000/api/courses/?page_size=1 ->(resultado por pagina)
+
+Params
+KEY VALUE DESCRIPTION
+page_size 1 Cantidad de results por página
+page 2 Numero de página
+
+ORDERNAR LOS RESULTADOS SEGUN UNA VARIABLE
+ordering ranking(variable) de menor a mayor segun el ranking
+
+viceversa
+ordering -ranking(variable) de ma yor a menor segun el ranking
+
+filtrar por fecha
+begin_date 2019-11-23 
+
+
+POST
+
+POST /api/api-token-auth/
+
+username: superadmin
+password: ThisIs@SecurePassw0rd
+
+
+POST http://localhost:8000/api/api-token-auth/   
+pestaña: Body/opcion raw / tipo: json
+
+{
+  "username": "superadmin",
+  "password": "ThisIS@SecurePassw0rd"
+}
+
+le damos Send
+
+La respuesta debe ser un token, lo copiamos
+
+Vamos para la pestaña header
+KEY VALUE DESCRIPTION
+Autorization Token ########
+
+
+
+
+GET http://localhost:8000/api/courses/2/
+resultado:
+  ranking: 2.00
+  marelials: [{
+      "id": 4,
+      title: welcome
+      description: the welcoming
+  }]
+  
+  
+  
+  
+  Vamos a crear los comentarios de materiales, esto sale en error
+  POST http://localhost:8000/api/materials/4/comments/
+  
+  raw/JSON
+  
+  {
+    "content": "This is a comment"
+  }
+  
+  
+  
+  Corrección
+  
+  POST http://localhost:8000/api/comments/
+  
+   raw/JSON
+  
+  {
+    "content": "This is a comment"
+    "material": 4
+  }
+
+para revisar lo creado
+
+GET http://localhost:8000/api/materials/4/comments/
+
+
+Crear UN NUEVO CURSO
+
+POST http://localhost:8000/api/courses/
+
+Body/raw/JSON
+
+{
+  "name": "Curso de Postman",
+  "description": "The description",
+  "teachers": [
+    {
+      "name": "David Aroesti",
+      "description": "Big Data Analyst",
+      "current_job": "Education Team Leader"
+    },
+    {
+      "name": "Eduardo Alvares",
+      "description": "Productor",
+      "current_job": "Course Director"
+    },
+  ]
+}
+
+send
+
+
+SE PUEDEN HACER PETICIONES POR EL MÉTODO POST PERO SIN ENVIAR INFO, EN LA URL ESTA
+LO NECESARIO PARA CREAR EL REGISTRO EN LA BASE DE DATOS
+
+EJEMPLO UN LIKE O DISLIKE DE UN COMENTARIO
+
+Primero vamos a traer los comentarios del material
+GET http://localhost:8000/api/materials/4/comments/
+
+Nos trae esta información:
+
+results: [
+{
+  id:1
+  content: this is comment
+  likes: 0,
+  created_at:
+  updated_At
+  material:4
+}
+]
+
+
+POST http://localhost:8000/api/comments/1/like/
+se le da enviar
+
+con esto veremos que likes aumenta en uno, si le damos otra vez enviar, volverá aumentar
+
+POST http://localhost:8000/api/comments/1/dislike/
+Con esto disminuirá los likes
+
+
+OTRA FORMA DE PASAR LA INFO POR POST ES x-wwwwww-form-urlencoded ES PARECIDO A CUANDO PASAMOS PARAMENTROS, VAMOS AGREGAR UN NUEVO COMENTARIO
+
+KEY VALUE DESCRIPTION
+content | Anoter commment |
+material | 4 |
+
+podemos verificar que utiliza una forma parecida a cuando hacemos el filtro cuando le damos show row log
+
+Ctrl + Alt + C  En la consola de postman, la consola permite ver la estructura del protocolo 
+
+content=Another%20comment&material=4
+
+
+PARA CARGAR UN ARCHIVO
+Body/form-data
+
+
+POST http:/localhost:8000/api/courses/1/upload_badge/
+
+En la pestaña body seleccionamos form-data
+
+KEY VALUE DESCRIPTION
+badge ( eligimos file) | seleccionamos el archivos a subir 
+luego send
+
+debe devolver una info 
+con 
+ok
+data
+  id
+  description
+  badge: url (copiamos esta url)
+  
+ 
+ vamos a una nueva pestaña
+ GET http:/localhost:8000/pegar url
+ 
+ send
+ 
+ debemos ver la imagen
+ 
+ 
+ ACTUALIZAR
+ 
+ CONSULTAMOS UN MATERIAL
+ 
+ 
+ GET http://localhost:8000/api/materials/4/comments/
+
+Para editar un comentario
+
+http://localhost:8000/api/comments/2/
+
+Miramos el metodo OPTIONS, EL CUAL NOS TRAE INFO RELAVANTE SOBRE EL ENDPOINT QUE ESTAMOS TRABAJANDO, NOS MUESTRA DIFERENTS ACTIONS
+ 
+ con PUT es para actulizar toda la intancia
+ mientras PATCH para actualizar una parte de la instancia
+
+{
+  id:2,
+  content: Another comment,
+  likes: 0,
+  material: 4
+}
+
+queremos actualizar content
+
+PATCH http://localhost:8000/api/comments/2/
+
+Body/raw/JSON
+
+{
+  "content": "A edited content"
+}
+
+send
+
+
+
+PUT http://localhost:8000/api/comments/2/
+
+Body/raw/JSON
+
+{
+  "content": "A edited content 2",
+  "likes": 100,
+  "material":2
+}
+
+send
+
+DELETE
+
+DELETE http://localhost:8000/api/comments/1/
+
