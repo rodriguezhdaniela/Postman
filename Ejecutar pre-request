@@ -1,0 +1,27 @@
+VAMOS A GUARDAR EN UNA VARIABLE DE NUESTRO ENTORNO LA FECHA EN LA QUE ESTAMOS ACTUALMENTE
+
+VAMOS A AUTOMATIZAR SIENTO LA FECHA LA DE HOY, 
+
+VAMOS A LA PESTAÑA DE PRE-REQUEST SCRIPT
+
+//Guardar en el enviroment el dia de hoy
+pm.enviroment.set("today", new DATE().toIOString())
+
+le damos al ojo donde esta las variables de entorno.
+Aparecerá una nueva variable llamada today 
+
+Vamos para la pestaña (Params)
+
+KEY    VALUE DESCRIPTION
+begin_date | {{today}}
+
+Esto es ejecutar codigo antes de hacer un llamado utlizando pre-request script
+
+
+Para mantener actualizado el token dentro de una variable para que cuando montemos un ticket, todos los endpoints
+que tengan la variable seteada esten actualizados, se hace en Test
+
+primero hay que parsear la variable json
+
+var json = JSON.parse(responseBody);
+postman.setEnvironmentVariable("token", 'Token ${json.token}')
